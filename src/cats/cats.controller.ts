@@ -1,4 +1,6 @@
+import { CatRequestDto } from './../dto/cat.request.dto';
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -26,8 +28,8 @@ export class CatsController {
   }
 
   @Post()
-  async signUp() {
-    return 'signup';
+  async signUp(@Body() body: CatRequestDto) {
+    return this.catsService.signUp(body);
   }
 
   @Post('login')

@@ -23,7 +23,7 @@ export class Cat {
   })
   @IsString()
   @IsNotEmpty()
-  name: number;
+  name: string;
 
   @Prop({
     required: true,
