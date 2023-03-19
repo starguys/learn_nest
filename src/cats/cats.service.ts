@@ -7,6 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Cat } from './cats.schema';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CatsService {
@@ -16,8 +17,17 @@ export class CatsService {
     const { email, name, password } = body;
     const isCatExist = await this.catModel.exists({ email });
     if (isCatExist) {
-      throw new UnauthorizedException('이미 존재하는 이메일입니다.');
+      throw new UnauthorizedException('이미 존재하는 이메일입니다. 냐옹');
     }
-    return 'signup';
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const cat = await this.catModel.create({
+      email,
+      name,
+      password: hashPassword,
+    });
+
+    return cat.readOnlyData;
   }
 }
