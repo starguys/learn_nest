@@ -1,5 +1,10 @@
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  forwardRef,
+} from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -7,14 +12,16 @@ import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import * as mongoose from 'mongoose';
 
-import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    CatsModule,
-    UsersModule,
+
     MongooseModule.forRoot(process.env.MONGODB_URI),
+
+    CatsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
