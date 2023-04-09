@@ -1,5 +1,6 @@
-import { CatsRepository } from './cat.repository';
-import { CatRequestDto } from './../dto/cat.request.dto';
+import { Cat } from '../cats.schema';
+import { CatsRepository } from '../cat.repository';
+import { CatRequestDto } from '../dto/cat.request.dto';
 import {
   HttpException,
   Injectable,
@@ -28,5 +29,22 @@ export class CatsService {
     });
 
     return cat.readOnlyData;
+  }
+
+  async uploadImg(cat: Cat, files: Express.Multer.File[]) {
+    const fileName = `cats/${files[0].filename}`;
+    console.log(fileName);
+    const newCat = await this.catsRepository.findByIdAndUpdateImg(
+      cat.id,
+      fileName,
+    );
+    console.log(newCat);
+    return newCat;
+  }
+
+  async getAllCat() {
+    const allCat = await this.catsRepository.findAll();
+    const readOnlyCats = allCat.map((cat) => cat.readOnlyData);
+    return readOnlyCats;
   }
 }

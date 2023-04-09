@@ -1,4 +1,4 @@
-import { CatRequestDto } from './../dto/cat.request.dto';
+import { CatRequestDto } from './dto/cat.request.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Cat } from './cats.schema';
 import { Injectable, HttpException } from '@nestjs/common';
@@ -33,5 +33,20 @@ export class CatsRepository {
   async findCatByIdWithoutPassword(id: string): Promise<Cat | null> {
     const cat = await this.catModel.findById(id).select('-password');
     return cat;
+  }
+
+  async findByIdAndUpdateImg(id: string, fileName: string) {
+    const cat = await this.catModel.findById(id);
+
+    cat.imgUrl = `http://localhost:3000/media/${fileName}`;
+
+    const newCat = await cat.save();
+
+    console.log(newCat);
+    return newCat.readOnlyData;
+  }
+
+  async findAll() {
+    return await this.catModel.find();
   }
 }
